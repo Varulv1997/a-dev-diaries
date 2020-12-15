@@ -1,0 +1,2 @@
+<?php defined('BLUDIT') or die('Bludit CMS.'); ?>
+{"deployment":{"name":"Deployment","template":"","description":"","list":["deploying-a-flat-blog-on-ibm-cloud-foundry","deploying-a-simple-blog-on-ibm-cloud-for-the-first-time"]},"general":{"name":"General","description":"","template":"","list":[]}}

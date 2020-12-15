@@ -1,0 +1,9 @@
+{
+	"plugin-data":
+	{
+		"name": "Highlight",
+		"description": "Resalte su código."
+	},
+  "choose-theme": "Seleccione un tema.",
+  "highlight-example": "Ejemplo"
+}

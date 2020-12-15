@@ -1,0 +1,2 @@
+<?php defined('BLUDIT') or die('Bludit CMS.'); ?>
+{"version":"0.2.0","allowed_admin_roles":["admin","editor"],"allowed_modal_roles":["admin","editor","author"],"allow_html_upload":true,"allow_php_upload":true,"allow_js_upload":true,"allow_root_upload":false,"custom_mime_types":[],"resolve_folders":"symlink","root_directory":"root\/media","enable_ajax_page":false,"layout":"table","items_order":"asc","items_per_page":0,"position":1}

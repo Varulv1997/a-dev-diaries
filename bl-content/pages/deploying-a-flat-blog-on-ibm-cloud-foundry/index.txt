@@ -1,0 +1,136 @@
+In today's tutorial we will be deploying a flat blog on IBM Cloud's Cloud Foundry service.
+A "flat" blog or a "flat CMS" is a file-based content management system (CMS) that stores files and data in text files and folders instead of  a database, which is why I favour it on a traditional CMS. A flat system provides more performance and excellent security. 
+On the other hand Cloud Foundry is an open source cloud platform as a service (PaaS) that provides a choice of clouds, application services, and developer frameworks. It makes the process of building, testing, deploying and scaling applications smoother and faster. 
+And today we will be using IBM's Cloud Foundry to deploy a small database-less blog.
+<style>
+	#toc_container {
+    background: #f9f9f9 none repeat scroll 0 0;
+    border: 1px solid #aaa;
+    display: table;
+    font-size: 95%;
+    margin-top: 15px;
+	  margin-bottom: 15px;
+    padding: 20px;
+    width: auto;
+	  padding: 15px;
+    padding-left: 0px;
+    padding-bottom: 0px;
+}
+
+.toc_title {
+    font-weight: 700;
+    text-align: center;
+    font-size: 16px;
+    font-family: Raleway;
+    color: #1f1a30 !important;
+}
+
+#toc_container li, #toc_container ul, #toc_container ul li{
+    list-style: outside none none !important;
+}
+	</style>
+	<div id="toc_container">
+<p class="toc_title">Contents</p>
+<ul class="toc_list" style="margin: 0 0 1em 0;">
+  <li><a href="#1a">1 - Joining IBM Cloud</a>
+</li>
+	<li>
+		    <li><a href="#2a">2 - Creating a Cloud Foundry resource</a></li>
+	      <li><a href="#3a">3 - Deploy app</a></li>
+	</li>
+</ul>
+</div>
+<br>
+<h1 id="1a">Joining IBM Cloud</h1>
+First, create your free account on IBM Cloud <a href="https://cloud.ibm.com/registration">You can register here</a>.</br>
+</br><img src="https://i.imgur.com/vl439TA.jpg"></img></br></br>
+IBM Cloud gives you a <strong>$200 credit</strong> to access a large set of <strong>+350 products</strong>, it also has a <strong>Lite</strong> plan that includes more than <strong>40 products</strong>, which we intend to use today.<br>
+After creating your account you will be greeted with a minimal and clean dashboard where you can monitor all your products/services and their usages, the dashboard also contains useful tutorials for some of the products.
+<br><br><img src="https://i.imgur.com/09ADLK4.jpg"></img>
+<br>
+<br>
+From this dashboard we are going to <strong>create our first resource</strong>, which is basically the service you're going to be using, a resource can be managed by you directly and also by team members that are welcome to join you on IBM Cloud via the IAM Console. Resources can be either IBM services or third party ones, we are going to use IBM's in this tutorial, and in this case, <strong>IBM Cloud Foundry.</strong>
+<br>
+<br>
+<h1 id="2a">Creating a Cloud Foundry resource</h1>
+We will start by creating a Cloud Foundry resource or instance to deploy our app, the <strong>Cloud Foundry</strong> panel is available and accessible from the left sidebar on our IBM Cloud dashboard.
+<br><br>
+<img src="https://i.imgur.com/r5kkpi3.png"></img>
+<br><br>
+After navigating to the <strong>Cloud Foundry</strong> dashboard, we are going to create a new Cloud Foundry instance using the <strong>"Create"</strong> button.
+<br><br>
+<img src="https://i.imgur.com/jh8AkbY.png"></img>
+<br><br>
+We are then redirected to a configuration page to setup our new app.<br>
+For the region I will be choosing Dallas, big things happen there, and for sure will do here also.<br>
+The pricing plan we're selecting is the <strong>Lite</strong> plan, since this tutorial involves free IBM Cloud products, with 128MB of memory. The blog we're deploying today runs on PHP, so I will be selecting the <strong>PHP Community runtime</strong>.<br>
+After setting our region, plan, runtime and app name/domain we can now hit that <strong>"Create"</strong> button to launch our app sky-high.
+<br><br>
+<img src="https://i.imgur.com/Gys7huD.jpg"></img>
+<br><br>
+<h1 id="3a">Deploy app</h1>
+Before we deploy our app, we need to have the <strong>IBM CLI</strong> installed on our machine, the CLI connects you to various IBM services and makes the operations easier between your local machines and the IBM remote ones.<br>
+We can get the latest version here <a href="https://cloud.ibm.com/docs/cli?topic=cli-install-ibmcloud-cli">IBM CLI Docs</a>
+<br><br>
+In this tutorial I'm using a Windows machine, so I will be downloading the IBM CLI for Windows setup, a simple fast installer.
+After installing the <strong>IBM CLI</strong> We can simply start any terminal-like software, or the default Windows Command Prompt (CMD) and browse to our project's directory.<br>
+<br>
+I will be using an open source project that I personally contributed to over the years to deploy our app which can be found here <a href="https://github.com/bludit/bludit">Bludit</a>.<br><br>
+<img src="https://i.imgur.com/EwjbID1.jpg"></img>
+<br><br>
+Before we log-in into IBM Cloud Foundry using the IBM CLI, we need a custom configuration to override the default IBM Cloud Foundry one. <br>
+For example, our current app needs multiple PHP extensions that IBM's Cloud Foundry have them disabled or excluded by default. <br>
+In our root directory of our app we will create a directory named <strong>“.bp-config”</strong> (Without the quotation marks).<br>
+Next we need a simple JSON file to define our PHP extensions for Cloud Foundry, note that this file is not always necessary, unless you experience compability issues after pushing your app to IBM Cloud Foundry, you probably lack some PHP features or extensions.<br>
+Placing this little guy (options.json) in our <strong>“.bp-config”</strong> directory solves this problem:<br><br>
+<strong>options.json</strong><br><br>
+<pre style="color: #fafafa !important;background: #231a1a !important;">
+{
+  "WEBDIR": "public",
+  "PHP_EXTENSIONS": ["gd", "mbstring", "dom", "json"]
+}
+</pre>
+<img src="https://i.imgur.com/hNdAzcb.jpg"></img>
+<br><br>
+Back to the root of our project's directory we need one last file that is <strong>“manifest.yml”</strong><br>
+The app manifest contains options that are applied to the deployment command: <pre style="color: #fafafa !important;background: #000 !important;"> ibmcloud cf push </pre>You can use an app manifest to reduce the number of deployment details that you must specify every time you push an app to IBM Cloud as mentioned in the <a href="https://cloud.ibm.com/docs/cloud-foundry-public?topic=cloud-foundry-public-deployingapps">IBM Cloud Docs</a>
+<br>
+In this case our <strong>“manifest.yml”</strong> will look like:<br><br>
+<pre style="color: #fafafa !important;background: #231a1a !important;">
+ applications:
+ - name: anas-blog
+   random-route: true
+   memory: 128M
+</pre>
+<br>
+After adding both the <strong>“manifest.yml”</strong> and <strong>“.bp-config”</strong> with the <strong>“.bp-config”</strong> directory, our project's directory will look like something like this:
+<br><br>
+<img src="https://i.imgur.com/tBLgIEq.jpg"></img>
+<br><br>
+<h5>We can finally login to IBM Cloud Foundry using the IBM CLI and deploy our app.</h5><br>
+Fire up your terminal or command prompt and browse to the project's directory.<br>
+We need to login first using the following command:<br><br>
+<pre style="color: #fafafa !important;background: #000 !important;"> ibmcloud login </pre>
+You will be requested your authentification details, just the ones you used to create your account in the first place.
+<br><br>
+<img src="https://i.imgur.com/eLZJAfa.jpg"></img>
+<br><br>
+Next we need to target and specify a Cloud Foundry space using the following command:<br><br>
+<pre style="color: #fafafa !important;background: #000 !important;"> ibmcloud target --cf </pre>
+<img src="https://i.imgur.com/dkWyEdp.jpg"></img>
+<br><br>
+And finally we can deploy our app using one simple command:
+<pre style="color: #fafafa !important;background: #000 !important;"> ibmcloud cf push </pre>
+Note that if you skipped <a href="#2a">Step 2</a>, Cloud Foundry will automatically create a resource or an instance based on your <strong>“manifest.yml”</strong> and assign it a URL under a random IBM Cloud Foundry subdomain.<br>Reminder: we don't need a database for this app since we're using a flat infrastructure that writes data to files instead of databases.
+<br><br>
+<img src="https://i.imgur.com/pp1SRqI.jpg"></img>
+<br><br>
+Back to our IBM Cloud Foundry app's dashboard we can browse directly the app via its respective URL.
+<br><br>
+<img src="https://i.imgur.com/UBDxLtm.png"></img>
+<br><br>
+And voila ! Our app is live and running on IBM Cloud Foundry !
+<br><br>
+<img src="https://i.imgur.com/hjybH50.png"></img>
+<br><br>
+<h5>Looks familiar ? That's right ! you just deployed the same blog you're reading from right now :) !</h5>

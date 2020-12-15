@@ -1,0 +1,2 @@
+<?php defined('BLUDIT') or die('Bludit CMS.'); ?>
+{"position":1,"label":"About","text":"Hello there ! I'm a 23 years old Cloud Architect for a decade, I created this blog to be experimenting with IBM Cloud's features."}
