@@ -75,7 +75,7 @@ We can get the latest version here <a href="https://cloud.ibm.com/docs/cli?topic
 In this tutorial I'm using a Windows machine, so I will be downloading the IBM CLI for Windows setup, a simple fast installer.
 After installing the <strong>IBM CLI</strong> We can simply start any terminal-like software, or the default Windows Command Prompt (CMD) and browse to our project's directory.<br>
 <br>
-I will be using an open source project that I personally contributed to over the years to deploy our app which can be found here <a href="https://github.com/bludit/bludit">Bludit</a>.<br><br>
+I will be using an open source project that I personally contributed to over the years to deploy our app which can be found here <a href="https://github.com/Varulv1997/a-dev-diary">GitHub repo</a>.<br><br>
 <img src="https://i.imgur.com/EwjbID1.jpg"></img>
 <br><br>
 Before we log-in into IBM Cloud Foundry using the IBM CLI, we need a custom configuration to override the default IBM Cloud Foundry one. <br>
