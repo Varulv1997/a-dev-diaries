@@ -1,8 +1,0 @@
-Einrichtung und Verwendung mit EasyMDE
---------------------------------------
-
-* Das ZIP-Archiv auf den PC herunterladen.
-* Das ZIP-Archiv entpacken.
-* Das Verzeichnis /footnotes im entpackten ZIP-Archiv in das Vezeichnis /bl-plugins auf dem Server laden.
-* Die Datei plugin.php im Verzeichnis /easymde im entpackten ZIP-Archiv in das Verzeichnis /bl-plugins/tinymce auf dem Server laden.
-* Die Werkzeugleiste des Editors enthält nun zwei neue Buttons. Mit dem einen kann der Code für eine Fussnote zum Text hinzugefügt werden, mit dem anderen der Code für die Liste der Referenzen unter dem Text. Die Referenzen können zwischen <li> und </li> zur Liste der Referenzen hinzugefügt werden.

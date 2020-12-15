@@ -1,0 +1,10 @@
+{
+	"author": "Frédéric K.",
+	"email": "stradfred@gmail.com",
+	"website": "http://flatboard.free.fr",
+	"version":"2.0",
+	"releaseDate": "2020-06-16",
+	"license": "MIT",
+	"compatible": "3",
+	"notes": "Update for Bludit 3.12.0 by Clickwork."
+}

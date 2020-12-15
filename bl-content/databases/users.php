@@ -1,2 +1,0 @@
-<?php defined('BLUDIT') or die('Bludit CMS.'); ?>
-{"admin":{"nickname":"Admin","firstName":"Administrator","lastName":"","role":"admin","password":"840fa90ec4aa1dd8c97670f5ec8deb205a155380","salt":"5fd7bb605a6a4","email":"","registered":"2020-12-14 20:22:08","tokenRemember":"580bed50a7b0945b62fb6b5091ebc199","tokenAuth":"d7442625b8f50d13a4f8226eee579efa","tokenAuthTTL":"2009-03-15 14:00","twitter":"","facebook":"","instagram":"","codepen":"","linkedin":"","github":"","gitlab":"","description":"","mastodon":"","vk":""}}

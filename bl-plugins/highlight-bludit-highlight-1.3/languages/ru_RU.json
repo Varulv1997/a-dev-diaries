@@ -1,9 +1,0 @@
-{
-	"plugin-data":
-	{
-		"name": "Highlight",
-		"description": "Подсвети свой код"
-	},
-  "choose-theme": "Выбери тему подсветки кода",
-  "highlight-example": "Примеры подсветки"
-}
