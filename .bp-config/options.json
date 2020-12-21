@@ -1,0 +1,4 @@
+{
+  "WEBDIR": "public",
+  "PHP_EXTENSIONS": ["gd", "mbstring", "dom", "json"]
+}
