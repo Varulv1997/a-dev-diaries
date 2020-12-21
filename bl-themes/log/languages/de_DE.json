@@ -1,7 +1,6 @@
 {
-	"theme-data":
-	{
-		"name": "Log",
-		"description": "Theme, das sich vor allem für Blogs eignet."
-	}
+  "theme-data": {
+    "name": "Log",
+    "description": "Theme, das sich vor allem für Blogs eignet."
+  }
 }

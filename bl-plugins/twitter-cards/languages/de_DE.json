@@ -1,7 +1,6 @@
 {
-	"plugin-data":
-	{
-		"name": "Twitter Cards",
-		"description": "Twitter Cards hängt Medien wie Bilder oder Videos an einen Tweet, wenn ein Link der Website auf Twitter geteilt wird."
-	}
+  "plugin-data": {
+    "name": "Twitter Cards",
+    "description": "Twitter Cards hängt Medien wie Bilder oder Videos an einen Tweet, wenn ein Link der Website auf Twitter geteilt wird."
+  }
 }

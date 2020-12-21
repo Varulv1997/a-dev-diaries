@@ -1,8 +1,7 @@
 {
-	"plugin-data":
-	{
-		"name": "Bağlantılar",
-		"description": "Bağlantıları kenar çubuğunda gösterir, ayarlardan bu bağlantıları düzenleyebilirsiniz."
-	},
-	"add-a-new-link": "Yeni bağlantı ekle"
+  "plugin-data": {
+    "name": "Bağlantılar",
+    "description": "Bağlantıları kenar çubuğunda gösterir, ayarlardan bu bağlantıları düzenleyebilirsiniz."
+  },
+  "add-a-new-link": "Yeni bağlantı ekle"
 }
