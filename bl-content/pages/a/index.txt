@@ -1,0 +1,2 @@
+Hello there ! I'm a 23 years old Cloud Architect for a decade, I created this blog to be experimenting with IBM Cloud's features. I love open source, and this blog is powered by a long-time favorite project that I personally contributed to over the years.
+You can follow me on GitHub: https://github.com/Varulv1997

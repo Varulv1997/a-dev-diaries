@@ -1,0 +1,2 @@
+<?php defined('BLUDIT') or die('Bludit CMS.'); ?>
+{"head":"&lt;style&gt;.copyright {display: none !important}&lt;\/style&gt;","header":"","footer":"","adminHead":"","adminHeader":"","adminFooter":"","position":1}

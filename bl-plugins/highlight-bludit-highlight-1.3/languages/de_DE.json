@@ -1,0 +1,9 @@
+{
+	"plugin-data":
+	{
+		"name": "Highlight",
+		"description": "Mit dem Plugin kann Code mit Syntax-Highlighting angezeigt werden."
+	},
+  "choose-theme": "Vorlage",
+  "highlight-example": "Beispiel"
+}

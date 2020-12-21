@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://anas-blog.eu-gb.cf.appdomain.cloud</loc>
+  </url>
+  <url>
+    <loc>https://anas-blog.eu-gb.cf.appdomain.cloud/deploying-a-flat-blog-on-ibm-cloud-foundry</loc>
+    <lastmod>2020-12-15</lastmod>
+  </url>
+  <url>
+    <loc>https://anas-blog.eu-gb.cf.appdomain.cloud/a</loc>
+    <lastmod>2020-12-15</lastmod>
+  </url>
+  <url>
+    <loc>https://anas-blog.eu-gb.cf.appdomain.cloud/deploying-a-simple-blog-on-ibm-cloud-for-the-first-time</loc>
+    <lastmod>2020-12-14</lastmod>
+  </url>
+</urlset>

@@ -1,0 +1,49 @@
+Lightbox
+========
+
+Lightbox und Galerie basierend auf dem Lightbox-Skript von Lokesh Dhakar.
+
+Lightbox
+--------
+
+Eine Lightbox kann wie folgt erstellt werden:
+
+1) Bild hochladen und einfügen.
+
+2) Einen Link mit den Attributen "data-lightbox" und "data-title" zum Bild hinzufügen:
+
+<a href="" data-lightbox="" data-title=""><img src="[Pfad zum Bild]/bild-1"></a>
+
+3) Den Link zum Bild kopieren und als Wert des Attributs "href" einfügen, dem Bild einen eindeutigen Namen als Wert des Attributs "data-lightbox" geben (d. h. jedem Bild muss ein anderer Wert als Attribut gegeben werden) sowie Text als Wert des Attributs "data-title", wenn eine Bildunterschrift verwendet werden soll:
+
+<a href="[Pfad zum Bild]/bild-1.jpg" data-lightbox="bild-1"><img src="[Pfad zum Bild]/bild-1.jpg"></a>
+
+Beispiele:
+
+<a href="https://mydomain.com/bl-content/uploads/pages/6face7d58b0bcc241c7e881cecabb25d/bild-1.jpg" data-lightbox="bild-1" data-title="Meine Bildunterschrift">
+<img src="https://mydomain.com/bl-content/uploads/pages/6face7d58b0bcc241c7e881cecabb25d/bild-1.jpg"></a>
+
+oder
+
+<a href="/bl-content/uploads/pages/6face7d58b0bcc241c7e881cecabb25d/bild-1.jpg" data-lightbox="bild-1" data-title="My caption">
+<img src="/bl-content/uploads/pages/6face7d58b0bcc241c7e881cecabb25d/bild-1.jpg"></a>
+
+Achtung: Der Link des Bildes muss den vollständigen Pfad zum Verzeichnis enthalten, in dem das Bild auf dem Server abgelegt ist, entweder als absoluter Pfad (https://meine-domain.ch/bl-content/uploads/pages/[ID der Seite]/) oder als relativer Pfad (/bl-content/uploads/pages/[ID der Seite]/).
+
+Galerie
+-------
+    
+Um eine Gruppe von Bildern in einer Galerie zu zeigen, wird dem Attribut "data-lightbox" für alle Bilder derselbe Wert gegeben. Beispielsweise:
+
+<a href="[Pfad zum Bild]/bild-2.jpg" data-lightbox="gallerie"><img src="[Pfad zum Bild]/bild-2.jpg"></a>
+<a href="[Pfad zum Bild]/bild-3.jpg" data-lightbox="gallerie"><img src="[Pfad zum Bild]/bild-3.jpg"></a>
+<a href="[Pfad zum Bild]/bild-4.jpg" data-lightbox="gallerie"><img src="[Pfad zum Bild]/bild-4.jpg"></a>
+
+Achtung: Der Link des Bildes muss den vollständigen Pfad enthalten zum Verzeichnis, in dem es auf dem Server abgelegt ist, entweder als absoluter Pfad (https://meine-domain.ch/bl-content/uploads/pages/[ID der Seite]/) oder als relativer Pfad (/bl-content/uploads/pages/[ID der Seite]/).
+
+Website
+-------
+
+Website des Skripts mit weiteren Informationen:
+
+http://lokeshdhakar.com/projects/lightbox2/

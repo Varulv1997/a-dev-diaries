@@ -1,0 +1,62 @@
+a {
+	color: #2a2731;
+}
+
+a:hover {
+	color: #2a2731;
+	text-decoration: none;
+}
+
+.bg-success {
+	background-color: #2a2731!important;
+}
+
+.text-primary {
+	color: #2a2731!important;
+}
+
+.text-danger {
+	color: #da0037!important;
+}
+a.text-danger:focus,
+a.text-danger:hover {
+	color: #faae8a!important;
+}
+
+/* Buttons */
+.btn {
+	border-radius: 2px;
+}
+
+.btn-primary {
+	background-color: #2a2731;
+	border-color: #2a2731;
+}
+
+.btn-primary:hover {
+	background-color: #2a2731;
+	border-color: #2a2731;
+}
+
+.btn-light.focus, .btn-light:focus {
+	box-shadow: none;
+}
+
+.btn.focus, .btn:focus {
+	box-shadow: none;
+}
+
+/* Form */
+.form-control:focus {
+	box-shadow: none;
+}
+
+/* Tables */
+.table-striped tbody tr:nth-of-type(odd) {
+	background-color: rgba(0, 0, 0, 0.02);
+}
+
+.table thead th {
+	font-size: 0.8em;
+	text-transform: uppercase!important;
+}

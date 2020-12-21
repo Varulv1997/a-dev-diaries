@@ -1,0 +1,2 @@
+<?php defined('BLUDIT') or die('Bludit CMS.'); ?>
+{"email":"farahianas5@gmail.com","page":"","type":"text","subject":"","smtphost":"","smtpport":"","username":"admin","password":"anas1997","google-recaptcha":"","recaptcha-site-key":"","recaptcha-secret-key":"","sendEmailFrom":"fromUser","domainAddress":"","gdpr-checkbox":"","gdpr-checkbox-text":"","position":1}
