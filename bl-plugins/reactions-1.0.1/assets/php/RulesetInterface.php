@@ -23,7 +23,7 @@ interface RulesetInterface
      */
     public function getUnicodeReplace();
 
-	/**
+    /**
      * Returns the unicode shortcode greedy replacement rules
      *
      * @return array The unicode shortcode greedy rules

@@ -22,7 +22,7 @@
         "violet" => s18n__("Violet")
     ];
 ?>
-<?php if(file_exists(PATH_TMP . "pages.temp.php")) { ?>
+<?php if (file_exists(PATH_TMP . "pages.temp.php")) { ?>
     <div class="form-group row mt-2 mb-2">
         <label class="col-2 col-form-label text-danger"><?php s18n_e("Backup File"); ?></label>
         <div class="col-10 bg-danger text-white rounded mt-2 p-2">
@@ -82,7 +82,7 @@
                         <div class="select-toggle dropdown-toggle" data-toggle="dropdown"></div>
 
                         <div class="dropdown-menu dropdown-menu-right shadow-sm">
-                            <?php foreach($colors AS $color => $label) { ?>
+                            <?php foreach ($colors as $color => $label) { ?>
                                 <a href="#like-color:<?php echo $color; ?>" class="dropdown-item">
                                     <span class="value-dot" data-color="<?php echo $color; ?>"></span> <?php echo $label; ?>
                                 </a>
@@ -183,7 +183,7 @@
                         <div class="select-toggle dropdown-toggle <?php echo (!$like[2])? "disabled": ""; ?>" data-toggle="dropdown"></div>
 
                         <div class="dropdown-menu dropdown-menu-right shadow-sm">
-                            <?php foreach($colors AS $color => $label) { ?>
+                            <?php foreach ($colors as $color => $label) { ?>
                                 <a href="#dislike-color:<?php echo $color; ?>" class="dropdown-item">
                                     <span class="value-dot" data-color="<?php echo $color; ?>"></span> <?php echo $label; ?>
                                 </a>
@@ -234,7 +234,7 @@
                         <div class="select-toggle dropdown-toggle" data-toggle="dropdown"></div>
 
                         <div class="dropdown-menu dropdown-menu-right shadow-sm">
-                            <?php foreach($colors AS $color => $label) { ?>
+                            <?php foreach ($colors as $color => $label) { ?>
                                 <a href="#active-color:<?php echo $color; ?>" class="dropdown-item">
                                     <span class="value-dot" data-color="<?php echo $color; ?>"></span> <?php echo $label; ?>
                                 </a>
@@ -250,7 +250,7 @@
                         <div class="select-toggle dropdown-toggle" data-toggle="dropdown"></div>
 
                         <div class="dropdown-menu dropdown-menu-right shadow-sm">
-                            <?php foreach($colors AS $color => $label) { ?>
+                            <?php foreach ($colors as $color => $label) { ?>
                                 <a href="#hover-color:<?php echo $color; ?>" class="dropdown-item">
                                     <span class="value-dot" data-color="<?php echo $color; ?>"></span> <?php echo $label; ?>
                                 </a>
@@ -406,7 +406,7 @@
     </div>
 </div>
 
-<?php if(REACTIONS_PLUS) { ?>
+<?php if (REACTIONS_PLUS) { ?>
     <div class="form-group row">
         <h2 class="align-top">Reactions <span class="plus">Plus</span></h2>
     </div>
