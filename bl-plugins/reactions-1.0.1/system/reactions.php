@@ -14,23 +14,25 @@ declare(strict_types=1);
 
 
     // Main Reactions Class
-    class Reactions extends dbJSON {
+    class Reactions extends dbJSON
+    {
         /*
          |  CONSTRUCTOR
          |  @since  1.0.0
          */
-        public function __construct() {
+        public function __construct()
+        {
             global $reactions_plugin;
             $mode = $reactions_plugin->getValue("widget_mode");
 
             // Select Database
             parent::__construct(REACTIONS_WS . "votes-{$mode}.php");
-            if(!file_exists(REACTIONS_WS . "votes-{$mode}.php")) {
+            if (!file_exists(REACTIONS_WS . "votes-{$mode}.php")) {
                 $this->db = [ ];
                 $this->save();
 
                 // Reset Session
-                if(!Session::started()){
+                if (!Session::started()) {
                     Session::start();
                 }
                 Session::set("my-reactions", []);
@@ -45,19 +47,20 @@ declare(strict_types=1);
          |
          |  @return bool    TRUE if the page can be voted, FALSE if not.
          */
-        public function votable(Page $page): bool {
+        public function votable(Page $page): bool
+        {
             global $reactions_plugin;
 
             // Check Type
-            if(!in_array($page->type(), ["published", "static", "sticky"])) {
+            if (!in_array($page->type(), ["published", "static", "sticky"])) {
                 return false;
             }
-            if(!$reactions_plugin->getValue("show_on_" . $page->type())) {
+            if (!$reactions_plugin->getValue("show_on_" . $page->type())) {
                 return false;
             }
 
             // Check Comments
-            if(!$page->allowComments() && $reactions_plugin->getValue("hide_on_comments")) {
+            if (!$page->allowComments() && $reactions_plugin->getValue("hide_on_comments")) {
                 return false;
             }
             return true;
@@ -71,33 +74,34 @@ declare(strict_types=1);
          |
          |  @return bool    TRUE if the security checks has been solved, FALSE if not.
          */
-        protected function protection(Page $page): bool {
+        protected function protection(Page $page): bool
+        {
             global $reactions_plugin;
 
             // Secure :: Check HoneyPot
-            if($reactions_plugin->getValue("secure_honeypot")) {
-                if(!empty($_POST["reactions-email"] ?? "")) {
+            if ($reactions_plugin->getValue("secure_honeypot")) {
+                if (!empty($_POST["reactions-email"] ?? "")) {
                     return false;
                 }
             }
 
             // Secure :: Check Session Cookie
-            if($reactions_plugin->getValue("secure_cookies")) {
-                if(Cookie::get("BLUDIT-KEY") === false) {
+            if ($reactions_plugin->getValue("secure_cookies")) {
+                if (Cookie::get("BLUDIT-KEY") === false) {
                     return false;
                 }
-                if(Session::get("REACTIONS-KEY") !== md5(Cookie::get("BLUDIT-KEY"))) {
+                if (Session::get("REACTIONS-KEY") !== md5(Cookie::get("BLUDIT-KEY"))) {
                     return false;
                 }
             }
 
             // Secure :: Filter
-            if($reactions_plugin->getValue("secure_filter")) {
-                if(stripos($_SERVER["HTTP_REFERER"] ?? "", $page->permalink()) === false) {
+            if ($reactions_plugin->getValue("secure_filter")) {
+                if (stripos($_SERVER["HTTP_REFERER"] ?? "", $page->permalink()) === false) {
                     return false;
                 }
-                foreach(["bot", "crawl", "spider", "partner", "agent", "archiver"] AS $check) {
-                    if(stripos($_SERVER["HTTP_USER_AGENT"], $check) !== false) {
+                foreach (["bot", "crawl", "spider", "partner", "agent", "archiver"] as $check) {
+                    if (stripos($_SERVER["HTTP_USER_AGENT"], $check) !== false) {
                         return false;
                     }
                 }
@@ -116,49 +120,50 @@ declare(strict_types=1);
          |
          |  @return bool    TRUE if the vote has been counted, FALSE if not.
          */
-        public function vote(string $slug, int $vote): bool {
+        public function vote(string $slug, int $vote): bool
+        {
             global $pages;
             global $reactions_plugin;
 
             // Validate Page
-            if(is_string($slug) && $pages->exists($slug)) {
+            if (is_string($slug) && $pages->exists($slug)) {
                 $page = new Page($slug);
-            } else if(is_a($slug, Page) && !empty($slug->key())) {
+            } elseif (is_a($slug, Page) && !empty($slug->key())) {
                 $page = $slug;
             } else {
                 return false;
             }
 
             // Validate Votability
-            if($vote < 0 || $vote > 4 || !$this->votable($page)) {
+            if ($vote < 0 || $vote > 4 || !$this->votable($page)) {
                 return false;
             }
 
             // Protection
-            if(!$this->protection($page)) {
+            if (!$this->protection($page)) {
                 return false;
             }
 
             // Validate Vote
-            if(($old = $this->voted($slug)) === $vote) {
+            if (($old = $this->voted($slug)) === $vote) {
                 return true;
             }
-            if($old !== null) {
+            if ($old !== null) {
                 $this->unvote($page);
             }
 
             // [PLUS] Cookie or Session Storage
-            if(REACTIONS_PLUS && method_exists($this, "store")) {
+            if (REACTIONS_PLUS && method_exists($this, "store")) {
                 $this->store($page->key(), $vote);
             }
 
             // [PLUS] Log Votes
-            if(REACTIONS_PLUS && method_exists($this, "log")) {
+            if (REACTIONS_PLUS && method_exists($this, "log")) {
                 $this->log($page->key(), $vote, $old);
             }
 
             // Add to Workspace
-            if(!array_key_exists($page->key(), $this->db)) {
+            if (!array_key_exists($page->key(), $this->db)) {
                 $this->db[$page->key()] = "0,0,0,0,0";
             }
             $values = explode(",", $this->db[$page->key()]);
@@ -168,7 +173,7 @@ declare(strict_types=1);
 
             // Add to Session
             $values = Session::get("my-reactions");
-            if(!$values || !is_array($values)) {
+            if (!$values || !is_array($values)) {
                 $values = [];
             }
             $values[$page->key()] = $vote;
@@ -184,13 +189,14 @@ declare(strict_types=1);
          |
          |  @return bool    TRUE if the vote has been un-counted, FALSE if not.
          */
-        public function unvote(/* string | Page */ $slug): bool {
+        public function unvote(/* string | Page */ $slug): bool
+        {
             global $pages;
 
             // Validate Page
-            if(is_string($slug) && $pages->exists($slug)) {
+            if (is_string($slug) && $pages->exists($slug)) {
                 $page = new Page($slug);
-            } else if(is_a($slug, "Page") && !empty($slug->key())) {
+            } elseif (is_a($slug, "Page") && !empty($slug->key())) {
                 $page = $slug;
             } else {
                 return false;
@@ -198,18 +204,18 @@ declare(strict_types=1);
 
             // Check Vote
             $values = Session::get("my-reactions");
-            if(!$values || (is_array($values) && !array_key_exists($page->key(), $values))) {
+            if (!$values || (is_array($values) && !array_key_exists($page->key(), $values))) {
                 return false;
             }
             $vote = $values[$page->key()];
 
             // [PLUS] Unvote Cookie or Session
-            if(REACTIONS_PLUS && method_exists($this, "unstore")) {
+            if (REACTIONS_PLUS && method_exists($this, "unstore")) {
                 $this->unstore($page->key());
             }
 
             // Unvote Workspace
-            if(array_key_exists($page->key(), $this->db)) {
+            if (array_key_exists($page->key(), $this->db)) {
                 $values = explode(",", $this->db[$page->key()]);
                 $values[$vote]--;
                 $this->db[$page->key()] = implode(",", $values);
@@ -229,12 +235,13 @@ declare(strict_types=1);
          |
          |  @param  multi   The stored vote as integer or NULL if no vote has been made yet.
          */
-        public function voted(string $slug): ?int {
+        public function voted(string $slug): ?int
+        {
             $values = Session::get("my-reactions");
-            if(!$values || !is_array($values)) {
+            if (!$values || !is_array($values)) {
                 $values = [];
             }
-            if(array_key_exists($slug, $values)) {
+            if (array_key_exists($slug, $values)) {
                 return $values[$slug];
             }
             return null;
@@ -251,12 +258,13 @@ declare(strict_types=1);
          |                      3   Stars       Calculates the first, third and firth one.
          |                      5   Complete    All
          */
-        public function votes(string $slug, int $steps = 5): array {
-            if(array_key_exists($slug, $this->db)) {
+        public function votes(string $slug, int $steps = 5): array
+        {
+            if (array_key_exists($slug, $this->db)) {
                 $values = explode(",", $this->db[$slug]);
 
                 $return = [];
-                switch($steps) {
+                switch ($steps) {
                     case 2: //@pass
                         $return[] = $values[0] + $values[1] + floor($values[2] / 2);
                         $return[] = $values[4] + $values[3] + ceil($values[2] / 2);
@@ -281,7 +289,8 @@ declare(strict_types=1);
          |
          |  @return string  The rendered panel HTML content.
          */
-        public function render(string $location, string $design = "default"): string {
+        public function render(string $location, string $design = "default"): string
+        {
             global $page;
             global $reactions_plugin;
 
@@ -290,11 +299,10 @@ declare(strict_types=1);
             $mode = $reactions_plugin->getValue("widget_mode");
 
             // Render Widget
-            ob_start();
-            ?>
+            ob_start(); ?>
                 <form method="post" action="<?php echo $page->permalink(); ?>?reactions=vote" class="reactions reactions-mode-<?php echo $mode; ?>">
                     <input type="hidden" name="reactions" value="vote" />
-                    <?php if($reactions_plugin->getValue("secure_honeypot")) { ?>
+                    <?php if ($reactions_plugin->getValue("secure_honeypot")) { ?>
                         <input id="reactions-required-email" type="email" name="reactions-email" value="" />
                     <?php } ?>
                     <?php print($this->{"render_$mode"}()); ?>
@@ -305,10 +313,10 @@ declare(strict_types=1);
 
             // Render Container
             ob_start();
-            if($location === "siteSidebar") {
+            if ($location === "siteSidebar") {
                 ?>
                     <div class="plugin plugin-reactions reactions-<?php echo strtolower($location); ?>">
-                        <?php if(!empty($title)) { ?>
+                        <?php if (!empty($title)) { ?>
                             <h2 class="plugin-label"><?php echo $title; ?></h2>
                         <?php } ?>
                         <div class="plugin-content">
@@ -316,10 +324,10 @@ declare(strict_types=1);
                         </div>
                     </div>
                 <?php
-            } else if($location === "siteBodyEnd") {
+            } elseif ($location === "siteBodyEnd") {
                 ?>
                     <div class="container container-reactions reactions-<?php echo strtolower($location); ?>">
-                        <?php if(!empty($title)) { ?>
+                        <?php if (!empty($title)) { ?>
                             <h2 class="reactions-title"><?php echo $title; ?></h2>
                         <?php } ?>
                         <?php print($widget); ?>
@@ -328,7 +336,7 @@ declare(strict_types=1);
             } else {
                 ?>
                     <div class="reactions-panel reactions-<?php echo strtolower($location); ?>">
-                        <?php if(!empty($title)) { ?>
+                        <?php if (!empty($title)) { ?>
                             <h2 class="reactions-title"><?php echo $title; ?></h2>
                         <?php } ?>
                         <?php print($widget); ?>
@@ -344,7 +352,8 @@ declare(strict_types=1);
          |  RENDER :: LIKE|DISLIKE
          |  @since  1.0.0
          */
-        protected function render_like(): ?string {
+        protected function render_like(): ?string
+        {
             global $page;
             global $reactions_plugin;
 
@@ -359,15 +368,14 @@ declare(strict_types=1);
             $like[0] = implode("\n", array_slice($icon, 1));
 
             // Prepare Dislike
-            if($like[2]) {
+            if ($like[2]) {
                 $icon = $reactions_plugin->phpPath() . "assets" . DS . "imgs" . DS . "{$like[3]}.svg";
                 $icon = explode("\n", file_get_contents($icon));
                 $like[3] = implode("\n", array_slice($icon, 1));
             }
 
             // Render
-            ob_start();
-            ?>
+            ob_start(); ?>
                 <div class="reactions-ratings columns-<?php echo $like[2]+1; ?>">
                     <div class="rating rating-like">
                         <button class="rating-button active-<?php echo $like[1]; ?> <?php echo ($active === 4)? "active": ""; ?>"  name="reactions-vote" value="4">
@@ -376,7 +384,7 @@ declare(strict_types=1);
                         </button>
                     </div>
 
-                    <?php if($like[2]) { ?>
+                    <?php if ($like[2]) { ?>
                         <div class="rating rating-dislike">
                             <button class="rating-button active-<?php echo $like[4]; ?> <?php echo ($active === 0)? "active": ""; ?>" name="reactions-vote" value="0">
                                 <div class="button-icon"><?php echo $like[3]; ?></div>
@@ -395,7 +403,8 @@ declare(strict_types=1);
          |  RENDER :: STARS
          |  @since  1.0.0
          */
-        protected function render_stars(): ?string {
+        protected function render_stars(): ?string
+        {
             global $page;
             global $reactions_plugin;
 
@@ -407,7 +416,7 @@ declare(strict_types=1);
             // Calculate Avaerage
             $calc = 0;
             $total = array_sum($votes);
-            foreach($votes AS $num => $votes) {
+            foreach ($votes as $num => $votes) {
                 $calc += ($num + 1) * $votes;
             }
             $av = ($calc === 0)? 0: $calc / $total;
@@ -418,25 +427,24 @@ declare(strict_types=1);
             $icons = implode("\n", array_slice($icons, 1));
 
             // Render
-            ob_start();
-            ?>
+            ob_start(); ?>
                 <div class="reactions-ratings columns-<?php echo $stars[3]; ?>">
-                    <?php for($i = $stars[3]-1; $i >= 0; $i--) { ?>
+                    <?php for ($i = $stars[3]-1; $i >= 0; $i--) { ?>
                         <?php
                             $value = $stars[3] > 3? $i: [0 => 0, 1 => 2, 2 => 4][$i];
-                            if($av >= ($i + 1)) {
+                            if ($av >= ($i + 1)) {
                                 $class = "star-full";
                             } else {
                                 $class = ceil($av) > $i? "star-half": "star-empty";
                             }
                         ?>
                         <div class="rating rating-star <?php echo $class; ?> active-<?php echo $stars[1]; ?> hover-<?php echo $stars[2]; ?>">
-                            <button class="star star-<?php echo ($i+1); ?>" name="reactions-vote" value="<?php echo $value; ?>">
+                            <button class="star star-<?php echo($i+1); ?>" name="reactions-vote" value="<?php echo $value; ?>">
                                 <div class="button-icon"><?php echo $icons; ?></div>
                             </button>
                         </div>
                     <?php } ?>
-                    <?php if(!empty($total)) { ?>
+                    <?php if (!empty($total)) { ?>
                         <div class="rating-label">
                             &empty; <?php echo round($av, 1) . s18n__(" out of ") . $total. s18n__(" Votes"); ?>
                         </div>
@@ -452,7 +460,8 @@ declare(strict_types=1);
          |  RENDER :: EMOJIES
          |  @since  1.0.0
          */
-        protected function render_emojies(): ?string {
+        protected function render_emojies(): ?string
+        {
             global $page;
             global $reactions_plugin;
 
@@ -475,15 +484,14 @@ declare(strict_types=1);
             $active = $this->voted($page->key());
 
             // Render
-            ob_start();
-            ?>
+            ob_start(); ?>
                 <div class="reactions-ratings columns-5">
-                    <?php foreach($reactions_plugin->getValue("reaction_emojies") AS $num => $emoji) { ?>
+                    <?php foreach ($reactions_plugin->getValue("reaction_emojies") as $num => $emoji) { ?>
                         <?php [$emoji, $label] = array_values($emoji); ?>
                         <div class="rating rating-emoji-<?php echo $num; ?>">
                             <button type="submit" name="reactions-vote" value="<?php echo $num; ?>" class="emoji <?php echo ($active === $num)? "active": ""; ?>">
                                 <div class="emoji-image"><?php echo $client->shortnameToImage($emoji); ?></div>
-                                <?php if(!empty($label)) { ?>
+                                <?php if (!empty($label)) { ?>
                                     <div class="emoji-label"><?php echo $label; ?></div>
                                 <?php } ?>
                                 <div class="emoji-count"><?php echo $votes[$num]; ?></div>

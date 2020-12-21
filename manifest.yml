@@ -1,4 +1,4 @@
- applications:
- - name: anas-blogss
-   random-route: true
-   memory: 128M
+applications:
+  - name: anas-blogss
+    random-route: true
+    memory: 128M

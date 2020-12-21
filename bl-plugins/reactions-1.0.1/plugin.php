@@ -18,15 +18,16 @@ declare(strict_types=1);
 
 
     // Load Plus Package
-    if(file_exists(dirname(__FILE__) . DS . "plugin-plus.php")) {
+    if (file_exists(dirname(__FILE__) . DS . "plugin-plus.php")) {
         require_once "plugin-plus.php";
-    } else if(!defined("REACTIONS_PLUS")) {
+    } elseif (!defined("REACTIONS_PLUS")) {
         define("REACTIONS_PLUS", false);
     }
 
 
     // Init Plugin Class
-    class ReactionsPlugin extends Plugin {
+    class ReactionsPlugin extends Plugin
+    {
         const VERSION = "1.0.0";
         const STATUS = "Stable";
 
@@ -40,7 +41,8 @@ declare(strict_types=1);
          |  CONSTRUCTOR
          |  @since  0.1.0
          */
-        public function __construct() {
+        public function __construct()
+        {
             global $reactions_plugin;
             $reactions_plugin = $this;      // Attach Plugin
             parent::__construct();          // Call Parent
@@ -50,7 +52,8 @@ declare(strict_types=1);
          |  PLUGIN :: INIT
          |  @since  0.1.0
          */
-        public function init(): void {
+        public function init(): void
+        {
             $this->dbFields = [
                 "version"           => self::VERSION,                   // Current Version
                 "position"          => 1,                               // Sidebar Position
@@ -93,15 +96,16 @@ declare(strict_types=1);
          |  PLUGIN :: INSTALL
          |  @since  1.0.0
          */
-        public function install($position = 1): bool {
-            if($this->installed()) {
+        public function install($position = 1): bool
+        {
+            if ($this->installed()) {
                 return false;
             }
 
             // Create Workspace
             $workspace = $this->workspace();
             mkdir($workspace, DIR_PERMISSIONS, true);
-    		mkdir(PATH_PLUGINS_DATABASES . $this->directoryName, DIR_PERMISSIONS, true);
+            mkdir(PATH_PLUGINS_DATABASES . $this->directoryName, DIR_PERMISSIONS, true);
 
             // Store Defaults
             $this->db = $this->dbFields;
@@ -112,27 +116,28 @@ declare(strict_types=1);
          |  PLUGIN :: INSTALLED
          |  @since  1.0.0
          */
-        public function installed(): bool {
+        public function installed(): bool
+        {
             global $reactions;
             global $reactions_logs;
             global $reactions_users;
 
-            if(file_exists($this->filenameDb)) {
-                if(!defined("REACTIONS")) {
+            if (file_exists($this->filenameDb)) {
+                if (!defined("REACTIONS")) {
                     define("REACTIONS", self::VERSION);
                     define("REACTIONS_WS", $this->workspace());
                     return true;
                 } else {
-                    if(version_compare($this->db["version"] ?? "0.1.3", self::VERSION, "<")) {
+                    if (version_compare($this->db["version"] ?? "0.1.3", self::VERSION, "<")) {
                         $this->update($this->db["version"] ?? "0.1.3");
                     }
                 }
 
                 // Init Reactions Class
-                if(!class_exists("Reactions")) {
+                if (!class_exists("Reactions")) {
                     require_once "system" . DS . "reactions.php";
 
-                    if(REACTIONS_PLUS) {
+                    if (REACTIONS_PLUS) {
                         require_once "system" . DS . "reactions-plus.php";
                         $reactions = new ReactionsPlus();
                     } else {
@@ -141,13 +146,13 @@ declare(strict_types=1);
                 }
 
                 // Init Log Class
-                if(REACTIONS_PLUS && !class_exists("ReactionsLogs")) {
+                if (REACTIONS_PLUS && !class_exists("ReactionsLogs")) {
                     require_once "system" . DS . "reactions-logs.php";
                     $reactions_logs = new ReactionsLogs();
                 }
 
                 // Init Rating Class
-                if(REACTIONS_PLUS && !class_exists("ReactionsUsers")) {
+                if (REACTIONS_PLUS && !class_exists("ReactionsUsers")) {
                     require_once "system" . DS . "reactions-users.php";
                     $reactions_users = new ReactionsUsers();
                 }
@@ -159,18 +164,19 @@ declare(strict_types=1);
          |  PLUGIN :: UPDATE
          |  @since  1.0.0
          */
-        protected function update(string $version): void {
+        protected function update(string $version): void
+        {
             global $pages;
             global $reactions;
 
             // Init Reactions Class
-            if(!class_exists("Reactions")) {
+            if (!class_exists("Reactions")) {
                 require_once "system" . DS . "reactions.php";
                 $reactions = new Reactions();
             }
 
             // Upgrade from 0.1.x to 1.0.0
-            if(version_compare($version, "0.2.0", "<")) {
+            if (version_compare($version, "0.2.0", "<")) {
                 $old = $this->db;
                 $new = $this->dbFields;
 
@@ -192,33 +198,33 @@ declare(strict_types=1);
                 // Move Current Reactions
                 $copy = $pages->db;
                 $change = false;
-                foreach($pages->db AS $slug => &$page) {
-                    if(!isset($page["custom"])) {
+                foreach ($pages->db as $slug => &$page) {
+                    if (!isset($page["custom"])) {
                         continue;
                     }
-                    if(!isset($page["custom"]["reactions"])) {
+                    if (!isset($page["custom"]["reactions"])) {
                         continue;
                     }
                     $reactions->db[$slug] = implode(",", $page["custom"]["reactions"]);
                     unset($page["custom"]["reactions"]);
 
-                    if(!$change) {
+                    if (!$change) {
                         $change = true;
                     }
                 }
 
                 // Create Backup
-                if($change) {
+                if ($change) {
                     $backup = new dbJSON(PATH_TMP . "pages.temp.php");
                     $backup->db = $copy;
 
                     // Store Cleaned DB
                     try {
                         $status = @$backup->save();
-                    } catch(Exception $e) {
+                    } catch (Exception $e) {
                         $status = false;
                     }
-                    if($status) {
+                    if ($status) {
                         $pages->save();
                         $reactions->save();
                     } else {
@@ -235,18 +241,19 @@ declare(strict_types=1);
          |  BACKEND :: RENDER ADMIN FORM
          |  @since  0.1.0
          */
-        public function post(): bool {
+        public function post(): bool
+        {
             $data = $_POST;
-            foreach($this->dbFields AS $key => $value) {
-                if(in_array($key, ["widget_title", "gdpr_cookie_key", "gdpr_cookie_value"])) {
+            foreach ($this->dbFields as $key => $value) {
+                if (in_array($key, ["widget_title", "gdpr_cookie_key", "gdpr_cookie_value"])) {
                     $this->db[$key] = $data[$key] ?? $this->db[$key];
                 }
-                if($key === "widget_mode" && in_array($data[$key] ?? "", ["like", "stars", "emojies"])) {
+                if ($key === "widget_mode" && in_array($data[$key] ?? "", ["like", "stars", "emojies"])) {
                     $this->db[$key] = $data[$key];
                 }
 
                 // Like | Dislike Rating
-                if($key === "reaction_like") {
+                if ($key === "reaction_like") {
                     $this->db[$key] = [
                         $data['reaction_like'][0] ?? "thumbs-o-up",
                         $data['reaction_like'][1] ?? "green",
@@ -257,7 +264,7 @@ declare(strict_types=1);
                 }
 
                 // Stars Rating
-                if($key === "reaction_stars" && count($data[$key]) >= 3) {
+                if ($key === "reaction_stars" && count($data[$key]) >= 3) {
                     $this->db[$key] = [
                         $data['reaction_stars'][0] ?? "stars",
                         $data['reaction_stars'][1] ?? "yellow",
@@ -267,10 +274,10 @@ declare(strict_types=1);
                 }
 
                 // Emojies Rating
-                if($key === "reaction_emojies" && !empty($data[$key])) {
+                if ($key === "reaction_emojies" && !empty($data[$key])) {
                     $rating = [];
-                    for($i = 0; $i < 5; $i++) {
-                        if(($data[$key][$i]["emoji"] ?? "") !== "") {
+                    for ($i = 0; $i < 5; $i++) {
+                        if (($data[$key][$i]["emoji"] ?? "") !== "") {
                             $rating[] = array_values($data[$key][$i]);
                         }
                     }
@@ -278,25 +285,25 @@ declare(strict_types=1);
                 }
 
                 // Booleans
-                if(is_bool($value)) {
+                if (is_bool($value)) {
                     $this->db[$key] = ($data[$key] ?? "false") === "true";
                 }
 
                 // Frontend Hooks
                 $hooks = ["disabled", "pageBegin", "pageEnd", "siteSidebar", "siteBodyEnd", ":before", ":after", ":variable"];
-                if($key === "frontend_hook" && in_array($data[$key], $hooks)) {
+                if ($key === "frontend_hook" && in_array($data[$key], $hooks)) {
                     $this->db[$key] = $data[$key];
                 }
 
                 // Frontend Designs
                 $designs = ["none", "default"];
-                if($key === "frontend_design" && in_array($data[$key], $designs)) {
+                if ($key === "frontend_design" && in_array($data[$key], $designs)) {
                     $this->db[$key] = $data[$key];
                 }
             }
 
             // Remove Backup
-            if(file_exists(PATH_TMP . "pages.temp.php")) {
+            if (file_exists(PATH_TMP . "pages.temp.php")) {
                 unlink(PATH_TMP . "pages.temp.php");
             }
 
@@ -308,54 +315,54 @@ declare(strict_types=1);
          |  BACKEND :: RENDER ADMIN HEADER
          |  @since  0.1.0
          */
-        public function adminHead(): ?string {
+        public function adminHead(): ?string
+        {
             global $url;
-	        global $published;
+            global $published;
             global $static;
             global $sticky;
             global $reactions;
 
             // Check Content Page
-            if(stripos($url->slug(), "content") === 0 && $this->getValue("content_view")) {
+            if (stripos($url->slug(), "content") === 0 && $this->getValue("content_view")) {
                 $mode = $this->getValue("widget_mode");
 
                 // Build List
                 $list = [];
-                if($this->getValue("show_on_published")) {
+                if ($this->getValue("show_on_published")) {
                     $list = array_merge($list, $published);
                 }
-                if($this->getValue("show_on_static")) {
+                if ($this->getValue("show_on_static")) {
                     $list = array_merge($list, $static);
                 }
-                if($this->getValue("show_on_sticky")) {
+                if ($this->getValue("show_on_sticky")) {
                     $list = array_merge($list, $sticky);
                 }
-                if(empty($list)) {
+                if (empty($list)) {
                     return "";
                 }
 
                 // Render
-                ob_start();
-                ?>
+                ob_start(); ?>
                     <script type="text/javascript">
                         window.REACTIONS_DATA = {
-                            <?php foreach($list AS $slug) { ?>
+                            <?php foreach ($list as $slug) { ?>
                                 <?php
-                                    if($mode === "like") {
-                                        if($this->getValue("reaction_like")[2]) {
+                                    if ($mode === "like") {
+                                        if ($this->getValue("reaction_like")[2]) {
                                             $data = $reactions->votes($slug, 2);
                                             $output = $data[1] . " / " . $data[0];
                                         } else {
                                             $data = $reactions->votes($slug, 1);
                                             $output = $data[0];
                                         }
-                                    } else if($mode === "stars") {
+                                    } elseif ($mode === "stars") {
                                         $data = $reactions->votes($slug, $this->getValue("reaction_stars")[3]);
 
                                         // Calc Average
                                         $calc = 0;
                                         $total = array_sum($data);
-                                        foreach($data AS $num => $votes) {
+                                        foreach ($data as $num => $votes) {
                                             $calc += ($num + 1) * $votes;
                                         }
                                         $av = ($calc === 0)? 0: $calc / $total;
@@ -378,9 +385,8 @@ declare(strict_types=1);
             }
 
             // Check Dashboard Page
-            if(REACTIONS_PLUS && (strlen($url->slug()) === 0 || stripos($url->slug(), "dashboard") === 0)) {
-                ob_start();
-                ?>
+            if (REACTIONS_PLUS && (strlen($url->slug()) === 0 || stripos($url->slug(), "dashboard") === 0)) {
+                ob_start(); ?>
                     <style type="text/css">
                         #dashboard .reactions-plus-widget img.emojione {
                             width: 16px;
@@ -395,13 +401,12 @@ declare(strict_types=1);
             }
 
             // Check Reactions Page
-            if(stripos($url->slug(), "Reactions") === false) {
+            if (stripos($url->slug(), "Reactions") === false) {
                 return null;
             }
 
             // Render
-            ob_start();
-            ?>
+            ob_start(); ?>
                 <link type="text/css" rel="stylesheet" href="<?php echo $this->domainPath(); ?>/assets/css/emojionearea.min.css?ver=3.4.1" />
                 <link type="text/css" rel="stylesheet" href="<?php echo $this->domainPath(); ?>/system/css/admin.reactions.css?ver=<?php echo self::VERSION; ?>" />
                 <script type="text/javascript" src="<?php echo $this->domainPath(); ?>/assets/js/emojionearea.min.js?ver=3.4.1"></script>
@@ -416,7 +421,8 @@ declare(strict_types=1);
          |  BACKEND :: RENDER ADMIN FORM
          |  @since  0.1.0
          */
-        public function form(): void {
+        public function form(): void
+        {
             include "system" . DS . "admin.php";
         }
 
@@ -424,10 +430,11 @@ declare(strict_types=1);
          |  BACKEND :: DASHBOARD
          |  @since  1.0.0
          */
-        public function dashboard(): string {
+        public function dashboard(): string
+        {
             global $reactions_logs;
 
-            if(REACTIONS_PLUS && !empty($reactions_logs) && $this->getValue("log_ratings")) {
+            if (REACTIONS_PLUS && !empty($reactions_logs) && $this->getValue("log_ratings")) {
                 return $reactions_logs->widget();
             }
             return "";
@@ -437,34 +444,35 @@ declare(strict_types=1);
          |  FRONTEND :: SITE HEADER
          |  @since  0.1.0
          */
-        public function beforeSiteLoad(): void {
+        public function beforeSiteLoad(): void
+        {
             global $page;
             global $url;
             global $reactions;
 
             // Check Current Page
-            if($url->whereAmI() !== "page" || empty($page->uuid())) {
+            if ($url->whereAmI() !== "page" || empty($page->uuid())) {
                 return;
             }
-            if(!$reactions->votable($page)) {
+            if (!$reactions->votable($page)) {
                 return;
             }
             $this->frontend = true;
 
             // Session
-            if(!Session::started()){
+            if (!Session::started()) {
                 Session::start();
             }
 
             // Handle Vote
-            if(($_POST["reactions"] ?? "") === "vote") {
+            if (($_POST["reactions"] ?? "") === "vote") {
                 $status = $reactions->vote($page->key(), (int) $_POST["reactions-vote"]);
 
-                if(($_SERVER["HTTP_X_REQUESTED_WITH"] ?? "") === "XMLHttpRequest") {
+                if (($_SERVER["HTTP_X_REQUESTED_WITH"] ?? "") === "XMLHttpRequest") {
                     $this->frontend = true;
 
                     $response = [];
-                    if($status) {
+                    if ($status) {
                         $response["status"] = "success";
                         $response["message"] = $this->_render($this->getValue("frontend_hook"));
                     } else {
@@ -481,12 +489,12 @@ declare(strict_types=1);
             }
 
             // Prepare Cookies Check
-            if($this->getValue("secure_cookies") && Session::get("REACTIONS-KEY") === false) {
+            if ($this->getValue("secure_cookies") && Session::get("REACTIONS-KEY") === false) {
                 Session::set("REACTIONS-KEY", md5(session_id()));
             }
 
             // Handle Injection
-            switch($this->getValue("frontend_hook")) {
+            switch ($this->getValue("frontend_hook")) {
                 case ":before":
                     $page->setField("content", $reactions->render(":before", $this->getValue("frontend_design")) . "\n" . $page->content());
                     break;
@@ -503,16 +511,17 @@ declare(strict_types=1);
          |  FRONTEND :: SITE HEADER
          |  @since  0.1.0
          */
-        public function siteHead(): ?string {
-            if($this->frontend === false) {
+        public function siteHead(): ?string
+        {
+            if ($this->frontend === false) {
                 return null;
             }
 
             ob_start();
-            if($this->getValue("frontend_design") === "default") {
+            if ($this->getValue("frontend_design") === "default") {
                 ?><link type="text/css" rel="stylesheet" href="<?php echo $this->domainPath(); ?>system/css/reactions.css?ver=<?php echo self::VERSION; ?>" /><?php
             }
-            if($this->getValue("frontend_ajax")) {
+            if ($this->getValue("frontend_ajax")) {
                 ?><script type="text/javascript" src="<?php echo $this->domainPath(); ?>system/js/reactions.js?ver=<?php echo self::VERSION; ?>"></script><?php
             }
             $content = ob_get_contents();
@@ -524,7 +533,8 @@ declare(strict_types=1);
          |  FRONTEND :: PAGE BEGIN
          |  @since  1.0.0
          */
-        public function pageBegin(): ?string {
+        public function pageBegin(): ?string
+        {
             return $this->_render("pageBegin");
         }
 
@@ -532,7 +542,8 @@ declare(strict_types=1);
          |  FRONTEND :: PAGE END
          |  @since  0.1.0
          */
-        public function pageEnd(): ?string {
+        public function pageEnd(): ?string
+        {
             return $this->_render("pageEnd");
         }
 
@@ -540,7 +551,8 @@ declare(strict_types=1);
          |  FRONTEND :: SITE SIDEBAR
          |  @since  1.0.0
          */
-        public function siteSidebar(): ?string {
+        public function siteSidebar(): ?string
+        {
             return $this->_render("siteSidebar");
         }
 
@@ -548,7 +560,8 @@ declare(strict_types=1);
          |  FRONTEND :: SITE BODY END
          |  @since  0.1.0
          */
-        public function siteBodyEnd(): ?string {
+        public function siteBodyEnd(): ?string
+        {
             return $this->_render("siteBodyEnd");
         }
 
@@ -556,8 +569,9 @@ declare(strict_types=1);
          |  FRONTEND :: RENDER PANEL
          |  @since  1.0.0
          */
-        private function _render(string $hook): ?string {
-            if(!$this->frontend || $this->getValue("frontend_hook") !== $hook) {
+        private function _render(string $hook): ?string
+        {
+            if (!$this->frontend || $this->getValue("frontend_hook") !== $hook) {
                 return null;
             }
             global $reactions;

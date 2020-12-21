@@ -19,13 +19,14 @@ declare(strict_types=1);
      |
      |  @return string  The translated and formated string.
      */
-    if(!function_exists("s18n__")) {
-        function s18n__(string $string): string {
+    if (!function_exists("s18n__")) {
+        function s18n__(string $string): string
+        {
             global $L;
             $hash = "s18n-" . md5(strtolower($string));
             $value = $L->g($hash);
 
-            if($hash === $value){
+            if ($hash === $value) {
                 $value = $string;
             }
             return $value;
@@ -40,8 +41,9 @@ declare(strict_types=1);
      |
      |  @return <print>
      */
-    if(!function_exists("s18n_e")) {
-        function s18n_e(string $string): void {
+    if (!function_exists("s18n_e")) {
+        function s18n_e(string $string): void
+        {
             print(s18n__($string));
         }
     }
@@ -56,14 +58,15 @@ declare(strict_types=1);
      |
      |  @return multi   The respective string or null.
      */
-    if(!function_exists("bt_selected")) {
-        function bt_selected(/* string | bool */ $field, /* string | bool */ $compare = true, bool $print = true): ?string {
-            if($field === $compare) {
+    if (!function_exists("bt_selected")) {
+        function bt_selected(/* string | bool */ $field, /* string | bool */ $compare = true, bool $print = true): ?string
+        {
+            if ($field === $compare) {
                 $selected = 'selected="selected"';
             } else {
                 $selected = '';
             }
-            if(!$print){
+            if (!$print) {
                 return $selected;
             }
             print($selected);
@@ -81,14 +84,15 @@ declare(strict_types=1);
      |
      |  @return multi   The respective string or null.
      */
-    if(!function_exists("bt_checked")) {
-        function bt_checked(/* string | bool */ $field, /* string | bool */ $compare = true, bool $print = true): ?string {
-            if($field === $compare) {
+    if (!function_exists("bt_checked")) {
+        function bt_checked(/* string | bool */ $field, /* string | bool */ $compare = true, bool $print = true): ?string
+        {
+            if ($field === $compare) {
                 $checked = 'checked="checked"';
             } else {
                 $checked = '';
             }
-            if(!$print){
+            if (!$print) {
                 return $checked;
             }
             print($checked);
